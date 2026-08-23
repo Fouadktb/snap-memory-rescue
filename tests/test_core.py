@@ -2,12 +2,14 @@ from datetime import datetime, timezone
 import io
 import json
 from pathlib import Path
+import subprocess
 import zipfile
 
 import pytest
 from PIL import Image
 
-from app.core import discover_history, parse_memories_html, process_exports, safe_extract
+from app.core import composite_video, discover_history, parse_memories_html, process_exports, safe_extract
+from imageio_ffmpeg import get_ffmpeg_exe
 
 
 HTML = """<table><tbody><tr><th>Date</th><th>Media Type</th><th>Location</th><th></th></tr>
@@ -76,3 +78,22 @@ def test_restores_a_current_split_export(tmp_path: Path, monkeypatch):
     assert progress == [(1, 1, 1, 0)]
     assert applied[0][1].latitude == 52.52
     assert applied[0][1].longitude == 13.405
+
+
+def test_packaged_ffmpeg_can_bake_a_video_overlay(tmp_path: Path, monkeypatch):
+    ffmpeg = get_ffmpeg_exe()
+    main = tmp_path / "main.mp4"
+    overlay = tmp_path / "overlay.png"
+    output = tmp_path / "restored.mp4"
+    subprocess.run([
+        ffmpeg, "-hide_banner", "-loglevel", "error", "-y",
+        "-f", "lavfi", "-i", "color=c=blue:s=16x16:d=0.2",
+        "-c:v", "libx264", "-pix_fmt", "yuv420p", str(main),
+    ], check=True)
+    Image.new("RGBA", (16, 16), (255, 0, 0, 96)).save(overlay)
+    monkeypatch.setattr("app.core.resolve_ffmpeg", lambda: ffmpeg)
+
+    composite_video(main, overlay, output)
+
+    assert output.is_file()
+    assert output.stat().st_size > 0

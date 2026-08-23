@@ -21,18 +21,26 @@ Request and download your data from the [Snapchat Accounts Portal](https://accou
 You will need:
 
 - Python 3.10 or newer
-- [ExifTool](https://exiftool.org/) to embed capture dates and GPS data
-- [FFmpeg](https://ffmpeg.org/download.html) to bake overlays into videos
 - Free disk space of roughly three times the size of the Snapchat export while processing
+
+The launchers handle FFmpeg automatically on Windows, macOS, and Linux. On Windows they also download a private, verified copy of ExifTool—nothing needs to be added to `PATH`.
 
 `My Eyes Only` content is not normally included in a Snapchat export. Move anything you want to preserve out of My Eyes Only before requesting the export.
 
+## Run on Windows
+
+1. Install [Python for Windows](https://www.python.org/downloads/windows/) and select **Add Python to PATH** during setup.
+2. Download this repository using **Code → Download ZIP**, then extract it.
+3. Double-click `start.bat`.
+
+The first launch creates a private Python environment, installs the app and bundled FFmpeg, downloads ExifTool 13.59 directly from its official distribution, verifies its SHA-256 hash, and opens the browser. ExifTool is stored under `%LOCALAPPDATA%\SnapMemoryRescue\tools`; it does not change the system `PATH`.
+
 ## Run on macOS
 
-Install the system tools once:
+ExifTool is the only system tool needed on macOS:
 
 ```bash
-brew install exiftool ffmpeg
+brew install exiftool
 ```
 
 Then download this repository and double-click `start.command`, or run:
@@ -43,11 +51,11 @@ cd snap-memory-rescue
 ./start.command
 ```
 
-The first launch creates a private Python environment and installs the app. Your browser opens at <http://127.0.0.1:8000>.
+The first launch creates a private Python environment, installs the app and packaged FFmpeg, and opens <http://127.0.0.1:8000>.
 
-## Run on Windows or Linux
+## Run on Linux or start manually
 
-Install ExifTool and FFmpeg using your system's package manager, then create a virtual environment:
+Install ExifTool using your system's package manager, then create a virtual environment:
 
 ```bash
 python3 -m venv .venv
@@ -67,7 +75,7 @@ Install and start the app:
 
 ```bash
 python -m pip install -e .
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+python -m app.launcher
 ```
 
 Open <http://127.0.0.1:8000> if it does not open automatically.
@@ -87,6 +95,7 @@ Apple Photos reads the embedded date and location metadata during import. Do not
 
 - The web server binds to `127.0.0.1`, so it is accessible only from your computer.
 - Current exports are processed fully offline. No archive, account credential, analytics event, or telemetry is sent anywhere.
+- Initial setup downloads Python packages from PyPI. On Windows it also downloads ExifTool directly from the official SourceForge distribution and verifies the archive before use.
 - Legacy HTML exports may download their media directly from the Snapchat links contained in the export.
 - Temporary working files are removed after the finished ZIP is downloaded. Files left by an interrupted run are removed the next time the app starts.
 - The app does not delete anything from Snapchat.
@@ -101,9 +110,13 @@ Select the original ZIP along with every numbered part. The JSON metadata is usu
 
 Snapchat does not include GPS for every Memory. The report will distinguish missing source metadata from processing failures.
 
-**The app reports missing ExifTool or FFmpeg**
+**Windows reports that ExifTool is not on `PATH`**
 
-Install both tools, close the terminal running the app, and start it again.
+That is no longer required. Pull the latest version and launch with `start.bat`; the app keeps its own ExifTool copy. If an older terminal window is still running, close it first.
+
+**The Windows setup fails before opening the browser**
+
+Confirm that `py --version` works in Command Prompt and that antivirus software did not quarantine ExifTool. Run `start.bat` again and copy the complete error if it still fails.
 
 **The browser closes or the computer sleeps**
 
@@ -125,3 +138,5 @@ Bug reports and tested export-format samples with all personal data removed are 
 Snap Memory Rescue is an independent open-source project and is not affiliated with, endorsed by, or sponsored by Snap Inc. Snapchat is a trademark of Snap Inc.
 
 Licensed under the [MIT License](LICENSE).
+
+ExifTool, imageio-ffmpeg, and FFmpeg retain their own licenses; see [Third-party tools](THIRD_PARTY_NOTICES.md).

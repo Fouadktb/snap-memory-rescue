@@ -15,6 +15,7 @@ from fastapi.staticfiles import StaticFiles
 from starlette.background import BackgroundTask
 
 from .core import process_exports
+from .tools import resolve_exiftool, resolve_ffmpeg
 
 ROOT = Path(__file__).resolve().parent
 WORK_ROOT = Path(tempfile.gettempdir()) / "snap-memory-rescue"
@@ -48,7 +49,7 @@ app = FastAPI(title="Memory Rescue", docs_url=None, redoc_url=None)
 
 
 def missing_tools() -> list[str]:
-    return [tool for tool in ("exiftool", "ffmpeg") if shutil.which(tool) is None]
+    return [name for name, path in (("ExifTool", resolve_exiftool()), ("FFmpeg", resolve_ffmpeg())) if not path]
 
 
 def public_job(job: dict) -> dict:
@@ -91,7 +92,7 @@ async def create_job(exports: list[UploadFile] = File(...)):
     if missing:
         raise HTTPException(
             503,
-            f"Install {', '.join(missing)} before restoring an archive. See the README for instructions.",
+            f"Could not find {', '.join(missing)}. Start the app with the included launcher to set up its tools.",
         )
     if not exports or any(not item.filename or not item.filename.lower().endswith(".zip") for item in exports):
         raise HTTPException(400, "Choose all ZIP files Snapchat sent you.")
