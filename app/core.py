@@ -19,6 +19,8 @@ import httpx
 from bs4 import BeautifulSoup
 from PIL import Image
 
+from .tools import resolve_exiftool, resolve_ffmpeg
+
 MEDIA_EXTENSIONS = {".jpg", ".jpeg", ".png", ".heic", ".webp", ".gif", ".mp4", ".mov", ".m4v"}
 DOWNLOAD_RE = re.compile(r"downloadMemories\(\s*['\"](.*?)['\"]\s*,\s*this\s*,\s*(true|false)", re.I)
 COORD_RE = re.compile(r"(-?\d+(?:\.\d+)?)\s*,\s*(-?\d+(?:\.\d+)?)")
@@ -120,7 +122,7 @@ def metadata_args(memory: Memory) -> list[str]:
 
 
 def apply_metadata(path: Path, memory: Memory) -> str | None:
-    exiftool = shutil.which("exiftool")
+    exiftool = resolve_exiftool()
     warning = None
     if exiftool:
         result = subprocess.run([exiftool, *metadata_args(memory), str(path)], capture_output=True, text=True)
@@ -244,7 +246,7 @@ def composite_image(main: Path, overlay: Path, output: Path) -> None:
 
 
 def composite_video(main: Path, overlay: Path, output: Path) -> None:
-    ffmpeg = shutil.which("ffmpeg")
+    ffmpeg = resolve_ffmpeg()
     if not ffmpeg:
         raise RuntimeError("FFmpeg is required to bake overlays into videos.")
     result = subprocess.run([

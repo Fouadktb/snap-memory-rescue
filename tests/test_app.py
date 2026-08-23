@@ -11,10 +11,10 @@ client = TestClient(app)
 
 
 def test_missing_tools_are_reported(monkeypatch):
-    monkeypatch.setattr("app.main.missing_tools", lambda: ["exiftool", "ffmpeg"])
+    monkeypatch.setattr("app.main.missing_tools", lambda: ["ExifTool", "FFmpeg"])
     response = client.post("/api/jobs", files=[("exports", ("export.zip", b"x", "application/zip"))])
     assert response.status_code == 503
-    assert "Install exiftool, ffmpeg" in response.json()["detail"]
+    assert "Could not find ExifTool, FFmpeg" in response.json()["detail"]
 
 
 def test_home_page_loads():

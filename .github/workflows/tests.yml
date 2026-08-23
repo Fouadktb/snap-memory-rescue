@@ -21,3 +21,16 @@ jobs:
           cache: pip
       - run: python -m pip install -e '.[dev]'
       - run: pytest -q
+
+  windows-tools:
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+          cache: pip
+      - run: python -m pip install -e '.[dev]'
+      - name: Provision and launch-check private tools
+        run: python -c "from app.tools import prepare_runtime_tools; print(prepare_runtime_tools())"
+      - run: pytest -q

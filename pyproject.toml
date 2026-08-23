@@ -1,9 +1,10 @@
 [project]
 name = "snap-memory-rescue"
-version = "1.0.0"
+version = "1.1.0"
 description = "Local-first Snapchat Memories export restorer"
 readme = "README.md"
 license = "MIT"
+license-files = ["LICENSE", "THIRD_PARTY_NOTICES.md"]
 requires-python = ">=3.10"
 authors = [{ name = "Fouad KTB" }]
 keywords = ["snapchat", "memories", "exif", "apple-photos", "photo-export"]
@@ -17,6 +18,7 @@ dependencies = [
   "beautifulsoup4>=4.12,<5",
   "fastapi>=0.116,<1",
   "httpx>=0.28,<1",
+  "imageio-ffmpeg>=0.6,<0.7",
   "pillow>=11.3,<12",
   "python-multipart>=0.0.20,<1",
   "uvicorn[standard]>=0.35,<1",
