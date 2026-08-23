@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="en" class="scheme-only-dark">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Restore dates and GPS metadata from your Snapchat Memories export, locally on your computer.">
+  <link rel="stylesheet" href="/styles.css">
+  <title>Memory Rescue — Snapchat archive restorer</title>
+</head>
+<body>
+  <main class="app" id="app">
+    <nav class="nav" aria-label="Main navigation">
+      <a class="brand" href="#top" aria-label="Memory Rescue home"><span class="brand-mark" aria-hidden="true"></span>MEMORY RESCUE</a>
+      <div class="privacy"><span aria-hidden="true">●</span> Runs on this computer</div>
+    </nav>
+
+    <section class="hero" id="top">
+      <div class="hero-copy">
+        <p class="eyebrow">YOUR MEMORIES / YOUR ARCHIVE</p>
+        <h1>Put every Snap back where it belongs.</h1>
+        <p class="lede">Turn Snapchat’s scattered export into dated, location-aware photos and videos you can drop straight into Photos.</p>
+        <ul class="benefits" role="list">
+          <li><span>01</span> Original capture dates</li>
+          <li><span>02</span> GPS restored when available</li>
+          <li><span>03</span> A clean, sorted ZIP</li>
+        </ul>
+      </div>
+
+      <section class="rescue-panel" aria-labelledby="rescue-title">
+        <div class="panel-topline"><span>LOCAL RESTORE UNIT</span><span id="unit-state">READY</span></div>
+        <div id="select-state">
+          <div class="drop-zone" id="drop-zone">
+            <input id="export" name="exports" type="file" accept=".zip,application/zip" multiple aria-describedby="drop-help">
+            <div class="folder-icon" aria-hidden="true"><span></span></div>
+            <h2 id="rescue-title">Drop every Snapchat ZIP here</h2>
+            <p id="drop-help">Select the original ZIP and every numbered part together. Large archives are streamed to disk.</p>
+            <button type="button" class="primary" id="choose-file">Choose all export ZIPs <span aria-hidden="true">↗</span></button>
+          </div>
+          <p class="local-note"><span aria-hidden="true">◆</span> Your archive stays on this computer. No account or password needed.</p>
+        </div>
+
+        <div id="progress-state" hidden>
+          <div class="progress-heading">
+            <div><p class="eyebrow">RESTORING ARCHIVE</p><h2 id="progress-title">Reading your export…</h2></div>
+            <span class="progress-percent tabular" id="progress-percent">0%</span>
+          </div>
+          <div class="progress-track" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="0"><span id="progress-fill"></span></div>
+          <div class="status-grid">
+            <div><span id="restored-count" class="tabular">0</span><small>RESTORED</small></div>
+            <div><span id="failed-count" class="tabular">0</span><small>NEEDS REVIEW</small></div>
+            <div><span id="total-count" class="tabular">—</span><small>FOUND</small></div>
+          </div>
+        </div>
+
+        <div id="complete-state" hidden>
+          <p class="eyebrow">RESCUE COMPLETE</p>
+          <h2>Your memories are ready for Photos.</h2>
+          <p id="complete-copy">The archive includes restored media and a report of anything that needs attention.</p>
+          <div class="complete-actions">
+            <a class="primary" id="download-link" href="#">Download clean archive <span aria-hidden="true">↓</span></a>
+            <button type="button" class="secondary" id="start-over">Rescue another export</button>
+          </div>
+        </div>
+      </section>
+    </section>
+
+    <section class="how" aria-labelledby="how-title">
+      <div class="section-heading"><p class="eyebrow">HOW IT WORKS</p><h2 id="how-title">One export in. A real archive out.</h2></div>
+      <ol class="steps">
+        <li><span>STEP 01</span><h3>Choose all ZIP parts</h3><p>Select the original export and every numbered ZIP in the same file picker.</p></li>
+        <li><span>STEP 02</span><h3>Join every memory</h3><p>Split archives, duplicate boundaries, and missing rows are handled automatically.</p></li>
+        <li><span>STEP 03</span><h3>Restore its context</h3><p>Capture time and GPS are written into photo and video metadata.</p></li>
+        <li><span>STEP 04</span><h3>Move into Photos</h3><p>Download the clean archive, unzip it, and drag everything into Photos.</p></li>
+      </ol>
+    </section>
+
+    <section class="comparison" aria-labelledby="comparison-title">
+      <p class="eyebrow">WHAT CHANGES</p>
+      <h2 id="comparison-title">From anonymous files to your actual timeline.</h2>
+      <div class="compare-grid">
+        <div class="file before"><span>SNAPCHAT EXPORT</span><strong>b8f2c1a9.mp4</strong><p>no capture date<br>no GPS<br>mixed folders</p></div>
+        <div class="transform" aria-hidden="true">→</div>
+        <div class="file after"><span>YOUR ARCHIVE</span><strong>2019-07-04_14-32-08.mp4</strong><p>date embedded<br>GPS embedded<br>sorted chronologically</p></div>
+      </div>
+    </section>
+
+    <footer><a class="brand" href="#top"><span class="brand-mark" aria-hidden="true"></span>MEMORY RESCUE</a><p>Independent tool. Not affiliated with Snap Inc.</p></footer>
+  </main>
+  <script src="/app.js" defer></script>
+</body>
+</html>

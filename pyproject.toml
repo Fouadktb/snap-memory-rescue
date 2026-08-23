@@ -1,0 +1,43 @@
+[project]
+name = "snap-memory-rescue"
+version = "1.0.0"
+description = "Local-first Snapchat Memories export restorer"
+readme = "README.md"
+license = "MIT"
+requires-python = ">=3.10"
+authors = [{ name = "Fouad KTB" }]
+keywords = ["snapchat", "memories", "exif", "apple-photos", "photo-export"]
+classifiers = [
+  "Development Status :: 5 - Production/Stable",
+  "Operating System :: OS Independent",
+  "Programming Language :: Python :: 3",
+  "Topic :: Multimedia :: Graphics",
+]
+dependencies = [
+  "beautifulsoup4>=4.12,<5",
+  "fastapi>=0.116,<1",
+  "httpx>=0.28,<1",
+  "pillow>=11.3,<12",
+  "python-multipart>=0.0.20,<1",
+  "uvicorn[standard]>=0.35,<1",
+]
+
+[project.urls]
+Homepage = "https://github.com/Fouadktb/snap-memory-rescue"
+Issues = "https://github.com/Fouadktb/snap-memory-rescue/issues"
+
+[project.optional-dependencies]
+dev = ["pytest>=8.4,<9"]
+
+[build-system]
+requires = ["setuptools>=75"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools]
+packages = ["app"]
+
+[tool.setuptools.package-data]
+app = ["static/*"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]

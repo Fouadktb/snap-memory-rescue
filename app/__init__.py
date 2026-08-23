@@ -1,0 +1,1 @@
+"""Memory Rescue application."""
